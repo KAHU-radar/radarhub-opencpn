@@ -188,99 +188,24 @@ add_definitions(-DPLUGIN_USE_SVG)
 
 # ----- Section above - Add your project SET(SRCS and SET(HDRS  etc.
 
-if(WIN32)
-    set(LIBPREFIX "")
-    set(LIBEXT "libstatic.lib")
-    set(LIBDIR "/RelWithDebInfo")
-    set(ZLIB "zlibstatic.lib")
-    set(LZMALIB "lzma.lib")
-    set(JANSSONLIB "jansson.lib")
-    set(AVROLIB "avro.lib")
-else()
-    set(LIBPREFIX "lib")
-    set(LIBEXT ".a")
-    set(LIBDIR "")
-    set(ZLIB "libz.a")
-    set(LZMALIB "liblzma.a")
-    set(JANSSONLIB "libjansson.a")
-    set(AVROLIB "libavro.a")
-endif()
+set(BUILD_SHARED_LIBS OFF)
+set(JANSSON_BUILD_SHARED_LIBS OFF)
+set(ZLIB_BUILD_EXAMPLES OFF)
 
-ExternalProject_Add(zlib
-    PREFIX ${CMAKE_BINARY_DIR}/zlib
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/zlib
-    CMAKE_ARGS
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        -DCMAKE_CXX_FLAGS="-fPIC"
-        -DCMAKE_C_FLAGS="-fPIC"
-        -DBUILD_SHARED_LIBS=OFF
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_BINARY_DIR}/zlib/src/zlib-build${LIBDIR}/${ZLIB}"
-        "${CMAKE_BINARY_DIR}/${ZLIB}"
-    BUILD_ALWAYS TRUE
-)
-ExternalProject_Add(jansson
-    PREFIX ${CMAKE_BINARY_DIR}/jansson
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/jansson
-    CMAKE_ARGS
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        -DCMAKE_CXX_FLAGS="-fPIC"
-        -DCMAKE_C_FLAGS="-fPIC"
-        -DBUILD_SHARED_LIBS=OFF
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_BINARY_DIR}/jansson/src/jansson-build/lib${LIBDIR}/${JANSSONLIB}"
-        "${CMAKE_BINARY_DIR}/${JANSSONLIB}"
-    BUILD_ALWAYS TRUE
-)
-ExternalProject_Add(liblzma
-    PREFIX ${CMAKE_BINARY_DIR}/liblzma
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/liblzma
-    CMAKE_ARGS
-        -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        -DCMAKE_CXX_FLAGS="-fPIC"
-        -DCMAKE_C_FLAGS="-fPIC"
-        -DBUILD_SHARED_LIBS=OFF
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_BINARY_DIR}/liblzma/src/liblzma-build${LIBDIR}/${LZMALIB}"
-        "${CMAKE_BINARY_DIR}/${LZMALIB}"
-    BUILD_ALWAYS TRUE
-)
-if(APPLE)
-    set(AVROFLAGS -DDUMMY=1)
-else()
-    set(AVROFLAGS -DCMAKE_EXE_LINKER_FLAGS="-static")
-endif()
-ExternalProject_Add(avro
-    PREFIX ${CMAKE_BINARY_DIR}/avro
-    SOURCE_DIR ${CMAKE_SOURCE_DIR}/libs/avro/lang/c
-    CMAKE_ARGS
-        -DCMAKE_LIBRARY_PATH=${CMAKE_BINARY_DIR}
-        -DJANSSON_LIBRARY_DIRS=${CMAKE_BINARY_DIR}
-        -DJANSSON_LIBRARIES=${CMAKE_BINARY_DIR}/${JANSSONLIB}
-        -DJANSSON_INCLUDE_DIRS=${CMAKE_BINARY_DIR}/jansson/src/jansson-build/include/
-        -DJANSSON_FOUND=True
-        ${AVROFLAGS}
-        -DBUILD_SHARED_LIBS=OFF
-    INSTALL_COMMAND
-        ${CMAKE_COMMAND} -E copy
-            "${CMAKE_BINARY_DIR}/avro/src/avro-build/src${LIBDIR}/${AVROLIB}"
-            "${CMAKE_BINARY_DIR}/${AVROLIB}"
-    BUILD_ALWAYS TRUE
-)
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/zlib)
+target_link_libraries(${PACKAGE_NAME} zlibstatic)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/jansson)
+target_link_libraries(${PACKAGE_NAME} jansson)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/liblzma)
+target_link_libraries(${PACKAGE_NAME} liblzma)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/avro/lang/c)
+target_link_libraries(${PACKAGE_NAME} avro-static)
+
 include_directories("${CMAKE_SOURCE_DIR}/libs/avro/lang/c/src")
-target_link_libraries(${PACKAGE_NAME} "${CMAKE_BINARY_DIR}/${AVROLIB}")
-# Include dependencies of libarvro directly, or the linker will be to stupid to not leave dangling symbols pointing to them
-target_link_libraries(${PACKAGE_NAME} "${CMAKE_BINARY_DIR}/${JANSSONLIB}")
-target_link_libraries(${PACKAGE_NAME} "${CMAKE_BINARY_DIR}/${ZLIB}")
-add_dependencies(${PACKAGE_NAME} avro)
-add_dependencies(avro zlib)
-add_dependencies(avro jansson)
-add_dependencies(avro liblzma)
 
-message(
-   STATUS
-     "LIBRARIES: zlib:${ZLIB_LIBRARY} jansson:${JANSSON_LIBRARY} libllzma:${LIBLZMA_LIBRARY}"
- )
   
 # ----- If using JSON validation in plugin section below is needed
 

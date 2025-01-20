@@ -188,24 +188,60 @@ add_definitions(-DPLUGIN_USE_SVG)
 
 # ----- Section above - Add your project SET(SRCS and SET(HDRS  etc.
 
+
+if(WIN32)
+    set(LIBPREFIX "")
+    set(LIBEXT "libstatic.lib")
+    set(LIBDIR "/RelWithDebInfo")
+    set(ZLIB "zlibstatic.lib")
+    set(LZMALIB "lzma.lib")
+    set(JANSSONLIB "jansson.lib")
+    set(AVROLIB "avro.lib")
+else()
+    set(LIBPREFIX "lib")
+    set(LIBEXT ".a")
+    set(LIBDIR "")
+    set(ZLIB "libz.a")
+    set(LZMALIB "liblzma.a")
+    set(JANSSONLIB "libjansson.a")
+    set(AVROLIB "libavro.a")
+endif()
+
+if(WIN32)
+    set(SEP ";")
+else()
+    set(SEP ":")
+endif()
+
+set(ENV{PKG_CONFIG_PATH} "${CMAKE_BINARY_DIR}/libs/jansson${SEP}${CMAKE_BINARY_DIR}libs/avro/lang/c/src${SEP}${CMAKE_BINARY_DIR}libs/zlib${SEP}${CMAKE_BINARY_DIR}libs/liblzma${SEP}$ENV{PKG_CONFIG_PATH}")
+
+message(STATUS "PKGS $ENV{PKG_CONFIG_PATH}")
+
 set(BUILD_SHARED_LIBS OFF)
-set(JANSSON_BUILD_SHARED_LIBS OFF)
+
+set(ORIG_CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+set(ORIG_SKIP_INSTALL_ALL ${SKIP_INSTALL_ALL})
+
+set(SKIP_INSTALL_ALL True)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/zlib)
 set(ZLIB_BUILD_EXAMPLES OFF)
-
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/zlib)
-target_link_libraries(${PACKAGE_NAME} zlibstatic)
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/libs/jansson)
-target_link_libraries(${PACKAGE_NAME} jansson)
-
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/liblzma)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/liblzma)
-target_link_libraries(${PACKAGE_NAME} liblzma)
 
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/jansson)
+set(JANSSON_BUILD_SHARED_LIBS OFF)
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/jansson)
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/avro/lang/c)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/avro/lang/c)
-target_link_libraries(${PACKAGE_NAME} avro-static)
-
 include_directories("${CMAKE_SOURCE_DIR}/libs/avro/lang/c/src")
 
+target_link_libraries(${PACKAGE_NAME} zlibstatic jansson liblzma avro-static)
+
+set(SKIP_INSTALL_ALL ${ORIG_SKIP_INSTALL_ALL})
+set(CMAKE_INSTALL_PREFIX ${ORIG_CMAKE_INSTALL_PREFIX})
   
 # ----- If using JSON validation in plugin section below is needed
 

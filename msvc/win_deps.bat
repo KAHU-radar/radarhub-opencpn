@@ -56,9 +56,9 @@ dir "%POEDIT_HOME%"
 set "EXTRA_PATH=%POEDIT_HOME%\bin;%EXTRA_PATH%"
 
 choco install -y msys2
-c:\tools\msys64\usr\bin\pacman -Sy --noconfirm
-c:\tools\msys64\usr\bin\pacman -S --noconfirm mingw-w64-x86_64-pkg-config
-set "EXTRA_PATH=c:\tools\msys64\usr\bin;%EXTRA_PATH%"
+set PATH=%PATH%;c:\tools\msys64\usr\bin
+pacman -Sy --noconfirm
+pacman -S --noconfirm mingw-w64-x86_64-pkg-config
 
 :: Update required python stuff
 ::

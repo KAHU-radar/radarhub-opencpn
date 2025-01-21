@@ -56,10 +56,9 @@ dir "%POEDIT_HOME%"
 set "EXTRA_PATH=%POEDIT_HOME%\bin;%EXTRA_PATH%"
 
 choco install -y msys2
-set PATH=%PATH%;c:\tools\msys64\usr\bin;c:\tools\msys64\mingw64\bin;c:\tools\msys64\ucrt64\bin
-reg add "HKCU\Environment" /v Path /t REG_EXPAND_SZ /d "%PATH%" /f
-pacman -Sy --noconfirm
-pacman -S --noconfirm mingw-w64-x86_64-pkg-config
+set "EXTRA_PATH=c:\tools\msys64\usr\bin;c:\tools\msys64\mingw64\bin;c:\tools\msys64\ucrt64\bin;%EXTRA_PATH%"
+c:\tools\msys64\usr\bin\pacman -Sy --noconfirm
+c:\tools\msys64\usr\bin\pacman -S --noconfirm mingw-w64-x86_64-pkg-config
 
 :: Update required python stuff
 ::

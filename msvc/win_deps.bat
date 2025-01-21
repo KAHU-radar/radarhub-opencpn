@@ -55,6 +55,11 @@ if not exist "%POEDIT_HOME%" (choco install -y poedit)
 dir "%POEDIT_HOME%"
 set "EXTRA_PATH=%POEDIT_HOME%\bin;%EXTRA_PATH%"
 
+# The msys2 on circleci doesn't have pacman, nor pkg-config(!!)
+choco install -y msys2
+pacman -Sy
+pacman -S mingw-w64-x86_64-pkg-config
+
 :: Update required python stuff
 ::
 echo doing python

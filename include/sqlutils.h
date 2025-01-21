@@ -44,6 +44,8 @@ public:
     int changes();
 
     std::string query_string;
+    const char *orig_query_string;
+    const char *current_query_string;
     const char *remaining_query_string;
     sqlite3_stmt* stmt;
     sqlite3* db;

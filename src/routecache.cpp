@@ -103,7 +103,7 @@ void Routecache::Migrate() {
     int max_id;
     {
         std::lock_guard<std::mutex> guard(lock);
-        Query query = Query(db, "SELECT max(id) FROM migrations;");
+        Query query(db, "SELECT max(id) FROM migrations;");
         query.step();
         max_id = query.get_int(0);
     }
@@ -144,7 +144,11 @@ void Routecache::RunMigration(int i, wxString name) {
     }    
     file.ReadAll(&sql, wxConvUTF8);
 
-    Query query = Query(db, std::string(sql.ToUTF8()));
+    std::string std_sql(sql.ToUTF8());
+     
+    // std::cerr << "<MigrationSQL>\n" << std_sql << "\n</MigrationSQL>\n\n";
+
+    Query query(db, std_sql);
     do {
         query.step();
     } while (query.next());
@@ -286,7 +290,7 @@ bool Routecache::Retrieve(AvroValue& route_message) {
           from
             target_position
           where
-            sent is false
+            sent is 0
             and target_id in (
               select
                 target_id

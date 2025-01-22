@@ -213,6 +213,10 @@ else()
     set(SEP ":")
 endif()
 
+# For liblzma, if we want to enable this, we need gettext, and on
+# macos universal, we need a non-brew, universal version of gettext...
+set(ENABLE_NLS OFF)
+
 set(ENV{PKG_CONFIG_PATH} "${CMAKE_BINARY_DIR}/libs/jansson${SEP}${CMAKE_BINARY_DIR}libs/avro/lang/c/src${SEP}${CMAKE_BINARY_DIR}libs/zlib${SEP}${CMAKE_BINARY_DIR}libs/liblzma${SEP}$ENV{PKG_CONFIG_PATH}")
 
 message(STATUS "PKGS $ENV{PKG_CONFIG_PATH}")

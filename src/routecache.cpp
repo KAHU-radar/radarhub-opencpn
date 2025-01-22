@@ -290,7 +290,7 @@ bool Routecache::Retrieve(AvroValue& route_message) {
           from
             target_position
           where
-            sent is 0
+            not sent
             and target_id in (
               select
                 target_id
@@ -307,7 +307,7 @@ bool Routecache::Retrieve(AvroValue& route_message) {
         and target.target_id = target_position.target_id
         and not target_position.sent
         order by timestamp asc
-        limit 10;
+        limit 100;
       )");
 
     std::string uuid;
@@ -353,7 +353,7 @@ void Routecache::MarkAsSent(AvroValue& route_message) {
       update
         target_position
       set
-        sent = true
+        sent = 1
       where
         target_id = (select target_id from target where uuid = ?)
         and timestamp <= datetime(? / 1000, 'unixepoch');

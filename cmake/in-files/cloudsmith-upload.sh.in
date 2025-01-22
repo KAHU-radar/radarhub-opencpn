@@ -254,7 +254,7 @@ elif [ $LOCAL_BUILD = false ]; then
     username_domain=${username_domain%.*}
     org_name_lower=$(echo "$CIRCLE_PROJECT_USERNAME" | tr '[:upper:]' '[:lower:]')
     username_domain_lower=$(echo "$username_domain" | tr '[:upper:]' '[:lower:]')
-    if [ "$org_name_lower" = "$username_domain_lower" ]; then
+    if (echo "$CLOUDSMITH_PUBLISHERS" | tr ";" "\n" | grep -e "^$username\$" > /dev/null) || [ "$org_name_lower" = "$username_domain_lower" ]; then
         cloudsmith push raw --republish --no-wait-for-sync \
             --name @PACKAGE_NAME@-@PACKAGE_VERSION@-@PKG_TARGET@-@COMPOUND_ARCH_DASH@@PKG_TARGET_WX_VER@@PKG_BUILD_GTK@-@PKG_TARGET_VERSION@-${OCPN_TARGET}-metadata \
             --version ${VERSION} \

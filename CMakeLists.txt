@@ -190,6 +190,8 @@ add_definitions(-DPLUGIN_USE_SVG)
 
 
 if(WIN32)
+    target_compile_definitions(${PACKAGE_NAME} PRIVATE _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+
     set(LIBPREFIX "")
     set(LIBEXT "libstatic.lib")
     set(LIBDIR "/RelWithDebInfo")

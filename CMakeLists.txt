@@ -64,7 +64,7 @@ set(LONG_DESCRIPTION
 
 set(VERSION_MAJOR "0")
 set(VERSION_MINOR "1")
-set(VERSION_PATCH "174")
+set(VERSION_PATCH "175")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "11/12/2024") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
@@ -219,7 +219,7 @@ endif()
 # macos universal, we need a non-brew, universal version of gettext...
 set(ENABLE_NLS OFF)
 
-set(ENV{PKG_CONFIG_PATH} "${CMAKE_BINARY_DIR}/libs/jansson${SEP}${CMAKE_BINARY_DIR}libs/avro/lang/c/src${SEP}${CMAKE_BINARY_DIR}libs/zlib${SEP}${CMAKE_BINARY_DIR}libs/liblzma${SEP}$ENV{PKG_CONFIG_PATH}")
+set(ENV{PKG_CONFIG_PATH} "${CMAKE_BINARY_DIR}/libs/jansson${SEP}${CMAKE_BINARY_DIR}libs/avro/lang/c/src${SEP}${CMAKE_BINARY_DIR}libs/zlib${SEP}${CMAKE_BINARY_DIR}libs/liblzma${SEP}$ENV{PKG_CONFIG_PATH}" CACHE STRING "Paths for pkg-config")
 
 message(STATUS "PKGS $ENV{PKG_CONFIG_PATH}")
 

@@ -64,7 +64,7 @@ set(LONG_DESCRIPTION
 
 set(VERSION_MAJOR "0")
 set(VERSION_MINOR "1")
-set(VERSION_PATCH "177")
+set(VERSION_PATCH "178")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "11/12/2024") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
@@ -227,16 +227,28 @@ set(BUILD_SHARED_LIBS OFF)
 
 set(ORIG_CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 set(ORIG_SKIP_INSTALL_ALL ${SKIP_INSTALL_ALL})
+set(ORIG_INSTALL_INC_DIR ${INSTALL_INC_DIR})
+set(ORIG_includedir ${includedir})
+set(ORIG_CMAKE_INSTALL_FULL_INCLUDEDIR ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+set(ORIG_CMAKE_INSTALL_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR})
+set(ORIG_CMAKE_INSTALL_LIBDIR = ${CMAKE_INSTALL_LIBDIR})
+set(ORIG_CMAKE_INSTALL_FULL_LIBDIR ${CMAKE_INSTALL_FULL_LIBDIR})
 
 set(SKIP_INSTALL_ALL True)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/zlib)
+set(INSTALL_INC_DIR ${CMAKE_BINARY_DIR}/libs/zlib)
 set(ZLIB_BUILD_EXAMPLES OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/zlib)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/liblzma)
+set(CMAKE_INSTALL_FULL_INCLUDEDIR ${CMAKE_SOURCE_DIR}/libs/liblzma/src/liblzma/api/)
+set(CMAKE_INSTALL_INCLUDEDIR ../../../libs/liblzma/src/liblzma/api/)
+set(CMAKE_INSTALL_LIBDIR .)
+set(CMAKE_INSTALL_FULL_LIBDIR ${CMAKE_BINARY_DIR}/libs/liblzma)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/liblzma)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/jansson)
+set(includedir ${CMAKE_SOURCE_DIR}/libs/jansson/src)
 set(JANSSON_BUILD_SHARED_LIBS OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/jansson)
 
@@ -244,8 +256,30 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/avro/lang/c)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/avro/lang/c)
 include_directories("${CMAKE_SOURCE_DIR}/libs/avro/lang/c/src")
 
-target_link_libraries(${PACKAGE_NAME} zlibstatic jansson liblzma avro-static)
+# Wrap, to simulate target_link_libraries(${PACKAGE_NAME} PRIVATE libname)
+add_library(zlibstatic-wrapper INTERFACE)
+target_link_libraries(zlibstatic-wrapper INTERFACE zlibstatic)
+add_library(jansson-wrapper INTERFACE)
+target_link_libraries(jansson-wrapper INTERFACE jansson)
+add_library(liblzma-wrapper INTERFACE)
+target_link_libraries(liblzma-wrapper INTERFACE liblzma)
+add_library(avro-static-wrapper INTERFACE)
+target_link_libraries(avro-static-wrapper INTERFACE liblzma)
 
+target_link_libraries(${PACKAGE_NAME} zlibstatic-wrapper)
+target_link_libraries(${PACKAGE_NAME} jansson-wrapper)
+target_link_libraries(${PACKAGE_NAME} liblzma-wrapper)
+target_link_libraries(${PACKAGE_NAME} avro-static-wrapper)
+
+get_target_property(FINAL_LINK_LIBRARIES ${PACKAGE_NAME} LINK_LIBRARIES)
+message(STATUS "XXXXXXXXXXXXX FINAL_LINK_LIBRARIES: ${FINAL_LINK_LIBRARIES}")
+
+set(CMAKE_INSTALL_FULL_LIBDIR ${ORIG_CMAKE_INSTALL_FULL_LIBDIR})
+set(CMAKE_INSTALL_LIBDIR = ${ORIG_CMAKE_INSTALL_LIBDIR})
+set(CMAKE_INSTALL_INCLUDEDIR ${ORIG_CMAKE_INSTALL_INCLUDEDIR})
+set(CMAKE_INSTALL_FULL_INCLUDEDIR ${ORIG_CMAKE_INSTALL_FULL_INCLUDEDIR})
+set(includedir ${ORIG_includedir})
+set(INSTALL_INC_DIR ${ORIG_INSTALL_INC_DIR})
 set(SKIP_INSTALL_ALL ${ORIG_SKIP_INSTALL_ALL})
 set(CMAKE_INSTALL_PREFIX ${ORIG_CMAKE_INSTALL_PREFIX})
 
@@ -407,3 +441,11 @@ get_property(
 foreach (dir ${dirs})
   message(STATUS "${CMLOC}dir='${dir}'")
 endforeach ()
+
+foreach(lib zlibstatic-wrapper jansson-wrapper liblzma-wrapper avro-static-wrapper ocpn::json-schema-validator ocpn::api ocpn::tinyxml ocpn::odapi ocpn::jsonlib ocpn::sqlite ocpn::wxjson ocpn::plugin-dc)
+    get_target_property(LINK_LIBS ${lib} INTERFACE_LINK_LIBRARIES)
+    message(STATUS "AAA ${lib} INTERFACE_LINK_LIBRARIES: ${LINK_LIBS}")
+endforeach()
+
+get_target_property(FINAL_LINK_LIBRARIES ${PACKAGE_NAME} LINK_LIBRARIES)
+message(STATUS "XXXXXXXXXXXXX FINAL_LINK_LIBRARIES: ${FINAL_LINK_LIBRARIES}")

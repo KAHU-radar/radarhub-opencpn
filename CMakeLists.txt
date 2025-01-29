@@ -64,7 +64,7 @@ set(LONG_DESCRIPTION
 
 set(VERSION_MAJOR "0")
 set(VERSION_MINOR "1")
-set(VERSION_PATCH "178")
+set(VERSION_PATCH "179")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "11/12/2024") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
@@ -252,6 +252,7 @@ set(includedir ${CMAKE_SOURCE_DIR}/libs/jansson/src)
 set(JANSSON_BUILD_SHARED_LIBS OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/jansson)
 
+add_definitions(-DLZMA_API_STATIC)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/avro/lang/c)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/avro/lang/c)
 include_directories("${CMAKE_SOURCE_DIR}/libs/avro/lang/c/src")
@@ -442,10 +443,10 @@ foreach (dir ${dirs})
   message(STATUS "${CMLOC}dir='${dir}'")
 endforeach ()
 
-foreach(lib zlibstatic-wrapper jansson-wrapper liblzma-wrapper avro-static-wrapper ocpn::json-schema-validator ocpn::api ocpn::tinyxml ocpn::odapi ocpn::jsonlib ocpn::sqlite ocpn::wxjson ocpn::plugin-dc)
-    get_target_property(LINK_LIBS ${lib} INTERFACE_LINK_LIBRARIES)
-    message(STATUS "AAA ${lib} INTERFACE_LINK_LIBRARIES: ${LINK_LIBS}")
-endforeach()
+# foreach(lib zlibstatic-wrapper jansson-wrapper liblzma-wrapper avro-static-wrapper ocpn::json-schema-validator ocpn::api ocpn::tinyxml ocpn::odapi ocpn::jsonlib ocpn::sqlite ocpn::wxjson ocpn::plugin-dc)
+#     get_target_property(LINK_LIBS ${lib} INTERFACE_LINK_LIBRARIES)
+#     message(STATUS "AAA ${lib} INTERFACE_LINK_LIBRARIES: ${LINK_LIBS}")
+# endforeach()
 
-get_target_property(FINAL_LINK_LIBRARIES ${PACKAGE_NAME} LINK_LIBRARIES)
-message(STATUS "XXXXXXXXXXXXX FINAL_LINK_LIBRARIES: ${FINAL_LINK_LIBRARIES}")
+# get_target_property(FINAL_LINK_LIBRARIES ${PACKAGE_NAME} LINK_LIBRARIES)
+# message(STATUS "XXXXXXXXXXXXX FINAL_LINK_LIBRARIES: ${FINAL_LINK_LIBRARIES}")

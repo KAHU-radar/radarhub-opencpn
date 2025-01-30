@@ -64,7 +64,7 @@ set(LONG_DESCRIPTION
 
 set(VERSION_MAJOR "0")
 set(VERSION_MINOR "1")
-set(VERSION_PATCH "179")
+set(VERSION_PATCH "180")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "11/12/2024") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
@@ -257,6 +257,10 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/libs/avro/lang/c)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/avro/lang/c)
 include_directories("${CMAKE_SOURCE_DIR}/libs/avro/lang/c/src")
 
+if (WIN32)
+    set_target_properties(avro-static PROPERTIES COMPILE_FLAGS "/Gd")
+endif()
+
 # Wrap, to simulate target_link_libraries(${PACKAGE_NAME} PRIVATE libname)
 add_library(zlibstatic-wrapper INTERFACE)
 target_link_libraries(zlibstatic-wrapper INTERFACE zlibstatic)
@@ -265,7 +269,7 @@ target_link_libraries(jansson-wrapper INTERFACE jansson)
 add_library(liblzma-wrapper INTERFACE)
 target_link_libraries(liblzma-wrapper INTERFACE liblzma)
 add_library(avro-static-wrapper INTERFACE)
-target_link_libraries(avro-static-wrapper INTERFACE liblzma)
+target_link_libraries(avro-static-wrapper INTERFACE avro-static)
 
 target_link_libraries(${PACKAGE_NAME} zlibstatic-wrapper)
 target_link_libraries(${PACKAGE_NAME} jansson-wrapper)

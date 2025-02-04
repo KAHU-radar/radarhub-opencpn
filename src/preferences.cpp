@@ -20,7 +20,7 @@ PreferencesWindow::PreferencesWindow(wxWindow* parent, wxWindowID id, const wxSt
     wxDialog(parent, id, title, pos, size, wxDEFAULT_DIALOG_STYLE)
 {
     // begin wxGlade: PreferencesWindow::PreferencesWindow
-    SetTitle(wxT("Crowdsource preferences"));
+    SetTitle(wxT("KAHU Radar Hub preferences"));
     wxBoxSizer* sizer_1 = new wxBoxSizer(wxVERTICAL);
     wxFlexGridSizer* grid_sizer_1 = new wxFlexGridSizer(10, 2, 5, 5);
     sizer_1->Add(grid_sizer_1, 0, wxALL|wxEXPAND, 10);
@@ -40,7 +40,7 @@ PreferencesWindow::PreferencesWindow(wxWindow* parent, wxWindowID id, const wxSt
     api_key = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
     api_key->SetMinSize(wxSize(200, 32));
     sizer_4->Add(api_key, 0, 0, 0);
-    hyperlink_1 = new wxHyperlinkCtrl(this, wxID_ANY, wxT("Make account"), wxT("http://crowdsource.kahu.earth"));
+    hyperlink_1 = new wxHyperlinkCtrl(this, wxID_ANY, wxT("Make account"), wxT("https://crowdsource.kahu.earth"));
     sizer_4->Add(hyperlink_1, 0, 0, 0);
     wxStaticText* label_3 = new wxStaticText(this, wxID_ANY, wxT("Minimum reconnect delay (s):"));
     grid_sizer_1->Add(label_3, 0, 0, 0);

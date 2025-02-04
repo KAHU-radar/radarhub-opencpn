@@ -50,8 +50,8 @@ include(ExternalProject)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 
 # define plugin name, owner and versions
-set(VERBOSE_NAME "Crowdsource")
-set(COMMON_NAME "Crowdsource")
+set(VERBOSE_NAME "KAHU Radar Hub")
+set(COMMON_NAME "KAHU Radar Hub")
 set(TITLE_NAME "crowdsource")
 set(PACKAGE_CONTACT "Egil Moeller")
 set(PACKAGE "crowdsource")
@@ -64,7 +64,7 @@ set(LONG_DESCRIPTION
 
 set(VERSION_MAJOR "0")
 set(VERSION_MINOR "1")
-set(VERSION_PATCH "181")
+set(VERSION_PATCH "182")
 set(VERSION_TWEAK "0")
 set(VERSION_DATE "11/12/2024") # DD/MM/YYYY format
 set(OCPN_MIN_VERSION "ov58")
@@ -94,7 +94,7 @@ set(CLOUDSMITH_USER "egil-moller")
 # set(CLOUDSMITH_USER "jon-gough")
 
 set(XML_INFO_URL
-    "https://opencpn.org/wiki/dokuwiki/doku.php?id=opencpn:opencpn_user_manual:plugins:safety:odraw1.6_pi"
+    "https://crowdsource.kahu.earth"
 )
 set(XML_SUMMARY ${SHORT_DESCRIPTION})
 set(XML_DESCRIPTION ${LONG_DESCRIPTION})

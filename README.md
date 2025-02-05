@@ -1,4 +1,5 @@
-# Crowdsource [OpenCPN](https://opencpn.org/) plugin
+# KAHU Radar Hub
+*A crowdsourcing [OpenCPN](https://opencpn.org/) plugin*
 
 Contribute AIS and ARPA targets from your vessel to crowdsourcing for marine safety!
 

@@ -94,7 +94,7 @@ set(CLOUDSMITH_USER "egil-moller")
 # set(CLOUDSMITH_USER "jon-gough")
 
 set(XML_INFO_URL
-    "https://crowdsource.kahu.earth"
+    "https://opencpn.org/OpenCPN/plugins/crowdsource.html"
 )
 set(XML_SUMMARY ${SHORT_DESCRIPTION})
 set(XML_DESCRIPTION ${LONG_DESCRIPTION})

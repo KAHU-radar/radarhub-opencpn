@@ -99,7 +99,7 @@ wxThread::ExitCode Connector::Entry() {
 
     std::cerr << "Connector running in " << std::this_thread::get_id() << " socket is nullptr: " << (socket == nullptr) << "\n";
     
-    config->Read("/Server/server", &server, "crowdsource.kahu.earth");
+    config->Read("/Server/server", &server, "radarhub.kahu.earth");
     config->Read("/Server/port", &port, 9900);
     config->Read("/Connection/min_reconnect_time", &min_reconnect_time, 100.0);
     config->Read("/Connection/max_reconnect_time", &max_reconnect_time, 600.0);

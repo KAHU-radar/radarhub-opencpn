@@ -48,7 +48,7 @@
 
 #include <wx/aui/aui.h>
 
-#include "crowdsource_pi.h"
+#include "radarhub_pi.h"
 #include "version.h"
 #include "wxWTranslateCatalog.h"
 
@@ -72,7 +72,7 @@ static const long long lNaN = 0xfff8000000000000;
 #endif
 
 void                    *g_ppimgr;
-crowdsource_pi          *g_crowdsource_pi;
+radarhub_pi          *g_radarhub_pi;
 wxBitmap                *m_pdeficon;
 
 // Needed for ocpndc.cpp to compile. Normally would be in glChartCanvas.cpp
@@ -83,7 +83,7 @@ float g_GLMinSymbolLineWidth;
 
 extern "C" DECL_EXP opencpn_plugin* create_pi(void *ppimgr)
 {
-    return new crowdsource_pi(ppimgr);
+    return new radarhub_pi(ppimgr);
 }
 
 extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
@@ -91,11 +91,11 @@ extern "C" DECL_EXP void destroy_pi(opencpn_plugin* p)
     delete p;
 }
 
-crowdsource_pi::crowdsource_pi(void *ppimgr)
+radarhub_pi::radarhub_pi(void *ppimgr)
 :opencpn_plugin_118(ppimgr)
 {
     g_ppimgr = ppimgr;
-    g_crowdsource_pi = this;
+    g_radarhub_pi = this;
     
     l_pDir = new wxString(*GetpPrivateApplicationDataLocation());
 
@@ -105,7 +105,7 @@ crowdsource_pi::crowdsource_pi(void *ppimgr)
     
 //    m_shareLocn = GetPluginDataDir("radar_pi") + wxFileName::GetPathSeparator() + _T("data") + wxFileName::GetPathSeparator();
         
-    // {l_pDir}/plugins/crowdsource_pi/data is the datadir for this plugin
+    // {l_pDir}/plugins/radarhub_pi/data is the datadir for this plugin
     avro_schema_t person_schema;
     const char  PERSON_SCHEMA[] =
     "{\"type\":\"record\",\
@@ -188,7 +188,7 @@ crowdsource_pi::crowdsource_pi(void *ppimgr)
     delete l_pDir;
 }
 
-crowdsource_pi::~crowdsource_pi()
+radarhub_pi::~radarhub_pi()
 {
     if (connector) { connector->Delete(); delete connector; }
     connector = nullptr;
@@ -198,7 +198,7 @@ crowdsource_pi::~crowdsource_pi()
     if (cache) delete cache;
     cache = nullptr;
 }
-int crowdsource_pi::Init(void)
+int radarhub_pi::Init(void)
 {
     wxSocketBase::Initialize();
     AddLocaleCatalog( PLUGIN_CATALOG_NAME );
@@ -206,7 +206,7 @@ int crowdsource_pi::Init(void)
     config = GetOCPNConfigObject();
 
     std::string slash = wxString(wxFileName::GetPathSeparator()).ToStdString();
-    std::string migrations = (GetPluginDataDir("crowdsource_pi").ToStdString()
+    std::string migrations = (GetPluginDataDir("radarhub_pi").ToStdString()
                               + slash + "data"
                               + slash + "migrations");
 
@@ -217,7 +217,7 @@ int crowdsource_pi::Init(void)
         cache = new Routecache(migrations, db_name);
         connector = new Connector(
              cache,
-             GetPluginDataDir("crowdsource_pi").ToStdString(),
+             GetPluginDataDir("radarhub_pi").ToStdString(),
              config);
     } catch (const std::exception& e) {
         std::cerr << e.what() << " Disabling plugin\n";
@@ -245,65 +245,65 @@ int crowdsource_pi::Init(void)
     );
 }
 
-void crowdsource_pi::LateInit(void)
+void radarhub_pi::LateInit(void)
 {
     SendPluginMessage(wxS("CROWDSOURCE_PI_READY_FOR_REQUESTS"), wxS("TRUE"));
     return;
 }
 
-bool crowdsource_pi::DeInit(void)
+bool radarhub_pi::DeInit(void)
 {
     wxSocketBase::Shutdown();
     return true;
 }
 
-int crowdsource_pi::GetAPIVersionMajor()
+int radarhub_pi::GetAPIVersionMajor()
 {
       return OCPN_API_VERSION_MAJOR;
 }
 
-int crowdsource_pi::GetAPIVersionMinor()
+int radarhub_pi::GetAPIVersionMinor()
 {
       return OCPN_API_VERSION_MINOR;
 }
 
-int crowdsource_pi::GetPlugInVersionMajor()
+int radarhub_pi::GetPlugInVersionMajor()
 {
       return PLUGIN_VERSION_MAJOR;
 }
 
-int crowdsource_pi::GetPlugInVersionMinor()
+int radarhub_pi::GetPlugInVersionMinor()
 {
       return PLUGIN_VERSION_MINOR;
 }
 
-int crowdsource_pi::GetPlugInVersionPatch()
+int radarhub_pi::GetPlugInVersionPatch()
 {
     return PLUGIN_VERSION_PATCH;
 }
 
-int crowdsource_pi::GetPlugInVersionPost()
+int radarhub_pi::GetPlugInVersionPost()
 {
     return PLUGIN_VERSION_TWEAK;
 }
 
-wxString crowdsource_pi::GetCommonName()
+wxString radarhub_pi::GetCommonName()
 {
     return _T(PLUGIN_COMMON_NAME);
 }
 
-wxString crowdsource_pi::GetShortDescription()
+wxString radarhub_pi::GetShortDescription()
 {
     return _(PLUGIN_SHORT_DESCRIPTION);
 }
 
-wxString crowdsource_pi::GetLongDescription()
+wxString radarhub_pi::GetLongDescription()
 {
     return _(PLUGIN_LONG_DESCRIPTION);
 
 }
 
-wxBitmap *crowdsource_pi::GetPlugInBitmap()
+wxBitmap *radarhub_pi::GetPlugInBitmap()
 {
     return m_pdeficon;
 }
@@ -337,7 +337,7 @@ void CrowdsourcePreferencesWindow::OnTimer(wxTimerEvent& event) {
     }
 }
 
-void crowdsource_pi::ShowPreferencesDialog(wxWindow *parent) {
+void radarhub_pi::ShowPreferencesDialog(wxWindow *parent) {
     try {
         if (!preferences_window) {
             preferences_window = new CrowdsourcePreferencesWindow(
@@ -349,7 +349,7 @@ void crowdsource_pi::ShowPreferencesDialog(wxWindow *parent) {
         wxString api_key;
         float min_reconnect_time;
         float max_reconnect_time;
-        config->Read("/Server/server", &server, "crowdsource.kahu.earth");
+        config->Read("/Server/server", &server, "radarhub.kahu.earth");
         config->Read("/Server/port", &port, 9900);
         config->Read("/Server/api_key", &api_key, "");
         config->Read("/Connection/min_reconnect_time", &min_reconnect_time, 100.0);
@@ -372,7 +372,7 @@ void crowdsource_pi::ShowPreferencesDialog(wxWindow *parent) {
             if (connector) { connector->Delete(); delete connector; }
             connector = new Connector(
                  cache,
-                 GetPluginDataDir("crowdsource_pi").ToStdString(),
+                 GetPluginDataDir("radarhub_pi").ToStdString(),
                  config);
              connector->Run();
         }
@@ -384,7 +384,7 @@ void crowdsource_pi::ShowPreferencesDialog(wxWindow *parent) {
     }
 }
 
-void crowdsource_pi::SetPositionFixEx(PlugIn_Position_Fix_Ex &pfix)
+void radarhub_pi::SetPositionFixEx(PlugIn_Position_Fix_Ex &pfix)
 {
     latitude = pfix.Lat;
     longitude = pfix.Lon;
@@ -396,14 +396,14 @@ static std::regex nmeaRattmRegex(R"(\$RATTM,(\d{2}),([\d\.\-]+),([\d\.\-]+),([^,
 
 
 
-void crowdsource_pi::Polar2Pos(double bearing, double distance, double& lat, double& lon) {
+void radarhub_pi::Polar2Pos(double bearing, double distance, double& lat, double& lon) {
     // latitude & longitude are of own ship, all other variables pertain to a target
     lat = latitude + distance * cos(deg2rad(bearing)) / 60. / 1852.;
     lon = longitude + distance * sin(deg2rad(bearing)) / cos(deg2rad(latitude)) / 60. / 1852.;
 }
 
 
-void crowdsource_pi::SetNMEASentence(wxString &sentence)
+void radarhub_pi::SetNMEASentence(wxString &sentence)
 {
     std::cout << "Crowdsource: Received NMEA" << sentence <<
      " at lat=" << latitude << " lon=" << longitude <<

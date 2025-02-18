@@ -14,77 +14,77 @@ msgstr ""
 "X-Crowdin-Project: opencpn\n"
 "X-Crowdin-Project-ID: 49843\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /plugins/crowdsource_pi/po/crowdsource_pi.pot\n"
+"X-Crowdin-File: /plugins/radarhub_pi/po/radarhub_pi.pot\n"
 "X-Crowdin-File-ID: 344\n"
 
 #: include/tpControlDialogDef.h:196
 msgid "Test Plugin Control Dialog"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:251 src/crowdsource_pi.cpp:252 src/crowdsource_pi.cpp:254
-#: src/crowdsource_pi.cpp:255
+#: src/radarhub_pi.cpp:251 src/radarhub_pi.cpp:252 src/radarhub_pi.cpp:254
+#: src/radarhub_pi.cpp:255
 msgid "Test Plugin"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:345
-msgid "crowdsource PlugIn for OpenCPN"
+#: src/radarhub_pi.cpp:345
+msgid "radarhub PlugIn for OpenCPN"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:350
-msgid "crowdsource PlugIn for OpenCPN\n"
+#: src/radarhub_pi.cpp:350
+msgid "radarhub PlugIn for OpenCPN\n"
 "demonstrates PlugIn processing of NMEA messages."
 msgstr ""
 
-#: src/crowdsource_pi.cpp:625
+#: src/radarhub_pi.cpp:625
 #, c-format
 msgid "OD Version: Major: %i, Minor: %i, Patch: %i, ODAPI Version: Major: %i, Minor: %i\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:626 src/crowdsource_pi.cpp:639
+#: src/radarhub_pi.cpp:626 src/radarhub_pi.cpp:639
 msgid "OD_FindPointInAnyBoundary\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:627 src/crowdsource_pi.cpp:640
+#: src/radarhub_pi.cpp:627 src/radarhub_pi.cpp:640
 msgid "OD_FindClosestBoundaryLineCrossing\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:628 src/crowdsource_pi.cpp:641
+#: src/radarhub_pi.cpp:628 src/radarhub_pi.cpp:641
 msgid "OD_FindFirstBoundaryLineCrossing\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:629 src/crowdsource_pi.cpp:642
+#: src/radarhub_pi.cpp:629 src/radarhub_pi.cpp:642
 msgid "OD_CreateBoundary\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:630 src/crowdsource_pi.cpp:643
+#: src/radarhub_pi.cpp:630 src/radarhub_pi.cpp:643
 msgid "OD_CreateBoundaryPoint\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:631 src/crowdsource_pi.cpp:644
+#: src/radarhub_pi.cpp:631 src/radarhub_pi.cpp:644
 msgid "OD_CreateTextPoint\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:632 src/crowdsource_pi.cpp:645
+#: src/radarhub_pi.cpp:632 src/radarhub_pi.cpp:645
 msgid "OD_AddPointIcon\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:633 src/crowdsource_pi.cpp:646
+#: src/radarhub_pi.cpp:633 src/radarhub_pi.cpp:646
 msgid "OD_DeletePointIcon\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:635
+#: src/radarhub_pi.cpp:635
 msgid "The following ODAPI's are available: \n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:648
+#: src/radarhub_pi.cpp:648
 msgid "The following ODAPI's are not available:\n"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:652
+#: src/radarhub_pi.cpp:652
 msgid "CROWDSOURCE"
 msgstr ""
 
-#: src/crowdsource_pi.cpp:731 src/tpControlDialogImpl.cpp:907
+#: src/radarhub_pi.cpp:731 src/tpControlDialogImpl.cpp:907
 #: src/tpControlDialogImpl.cpp:916 src/tpJSON.cpp:133
 msgid "File not found"
 msgstr ""
@@ -475,11 +475,11 @@ msgid "No file specified for input"
 msgstr ""
 
 #: src/tpicons.cpp:81
-msgid "crowdsource_pi data location"
+msgid "radarhub_pi data location"
 msgstr ""
 
 #: src/tpicons.cpp:101
-msgid "Failed to load all crowdsource_pi icons, check OCPN log for details"
+msgid "Failed to load all radarhub_pi icons, check OCPN log for details"
 msgstr ""
 
 #: src/tpicons.cpp:101

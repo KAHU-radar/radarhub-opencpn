@@ -52,9 +52,9 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 # define plugin name, owner and versions
 set(VERBOSE_NAME "KAHU Radar Hub")
 set(COMMON_NAME "KAHU Radar Hub")
-set(TITLE_NAME "crowdsource")
+set(TITLE_NAME "radarhub")
 set(PACKAGE_CONTACT "Egil Moeller")
-set(PACKAGE "crowdsource")
+set(PACKAGE "radarhub")
 set(SHORT_DESCRIPTION
     "Contribute AIS and ARPA targets to crowdsourcing for marine safety"
 )
@@ -86,7 +86,7 @@ set(ALPHA "alpha") # Standard Repos
 # Set if  Cloudsmith Base Repository name does not match your Git Repository
 # name. set(CLOUDSMITH_BASE_REPOSITORY "${GIT_REPOSITORY_NAME}")
 # set(CLOUDSMITH_BASE_REPOSITORY "opencpn-plugins")  #Ricks's customization
-set(CLOUDSMITH_BASE_REPOSITORY "crowdsource") # without the pi
+set(CLOUDSMITH_BASE_REPOSITORY "radarhub") # without the pi
 
 # Set the following to use OpenCPN cloudsmith repositories instead of own
 # repositories
@@ -94,7 +94,7 @@ set(CLOUDSMITH_USER "egil-moller")
 # set(CLOUDSMITH_USER "jon-gough")
 
 set(XML_INFO_URL
-    "https://opencpn.org/OpenCPN/plugins/crowdsource.html"
+    "https://opencpn.org/OpenCPN/plugins/radarhub.html"
 )
 set(XML_SUMMARY ${SHORT_DESCRIPTION})
 set(XML_DESCRIPTION ${LONG_DESCRIPTION})
@@ -165,7 +165,7 @@ add_definitions(-DUSE_S57)
 # ---- Section Below - Add your project SET(SRCS and SET(HDRS  etc..
 
 set(SRCS
-    src/crowdsource_pi.cpp
+    src/radarhub_pi.cpp
     src/routecache.cpp
     src/connector.cpp
     src/sqlutils.cpp
@@ -175,7 +175,7 @@ set(SRCS
 )
 
 set(HDRS
-    include/crowdsource_pi.h
+    include/radarhub_pi.h
     include/routecache.h
     include/connector.h
     include/sqlutils.h

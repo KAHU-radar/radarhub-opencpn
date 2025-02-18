@@ -26,7 +26,7 @@ PreferencesWindow::PreferencesWindow(wxWindow* parent, wxWindowID id, const wxSt
     sizer_1->Add(grid_sizer_1, 0, wxALL|wxEXPAND, 10);
     wxStaticText* label_1 = new wxStaticText(this, wxID_ANY, wxT("Server name:"));
     grid_sizer_1->Add(label_1, 0, 0, 0);
-    server = new wxTextCtrl(this, wxID_ANY, wxT("crowdsource.kahu.earth"));
+    server = new wxTextCtrl(this, wxID_ANY, wxT("radarhub.kahu.earth"));
     server->SetMinSize(wxSize(300, 32));
     grid_sizer_1->Add(server, 0, 0, 0);
     wxStaticText* label_2 = new wxStaticText(this, wxID_ANY, wxT("Port:"));
@@ -40,7 +40,7 @@ PreferencesWindow::PreferencesWindow(wxWindow* parent, wxWindowID id, const wxSt
     api_key = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
     api_key->SetMinSize(wxSize(200, 32));
     sizer_4->Add(api_key, 0, 0, 0);
-    hyperlink_1 = new wxHyperlinkCtrl(this, wxID_ANY, wxT("Make account"), wxT("https://crowdsource.kahu.earth"));
+    hyperlink_1 = new wxHyperlinkCtrl(this, wxID_ANY, wxT("Make account"), wxT("https://radarhub.kahu.earth"));
     sizer_4->Add(hyperlink_1, 0, 0, 0);
     wxStaticText* label_3 = new wxStaticText(this, wxID_ANY, wxT("Minimum reconnect delay (s):"));
     grid_sizer_1->Add(label_3, 0, 0, 0);

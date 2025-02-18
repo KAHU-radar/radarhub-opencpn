@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: crowdsource_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
+ * $Id: radarhub_pi.h,v 1.0 2015/01/28 01:54:37 jongough Exp $
  *
  * Project:  OpenCPN
  * Purpose:  OpenCPN General Drawing Plugin
@@ -160,12 +160,12 @@ std::cout << x  << std::endl ; } while (0)
 #define rad2deg(x) ((x)*360.0 / (2 * PI))
 #endif
 
-class crowdsource_pi;
+class radarhub_pi;
 
 class CrowdsourcePreferencesWindow : public PreferencesWindow {
 public:
     CrowdsourcePreferencesWindow(
-        crowdsource_pi& plugin,
+        radarhub_pi& plugin,
         wxWindow* parent, wxWindowID id, const wxString& title,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
@@ -184,18 +184,18 @@ public:
 
     void OnTimer(wxTimerEvent& event);
 
-    crowdsource_pi& plugin;
+    radarhub_pi& plugin;
     wxTimer timer;
 protected:
-    friend class crowdsource_pi;
+    friend class radarhub_pi;
 };
 
-class crowdsource_pi : public opencpn_plugin_118
+class radarhub_pi : public opencpn_plugin_118
 {
 public:
 
-    crowdsource_pi(void *ppimgr);
-    ~crowdsource_pi();
+    radarhub_pi(void *ppimgr);
+    ~radarhub_pi();
 
     wxWindow            *m_parent_window;
     wxFileConfig        *config;

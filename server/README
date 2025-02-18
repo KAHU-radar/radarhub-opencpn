@@ -1,6 +1,6 @@
 # Crowdsource server
 
-This subdirectory contains a simple server for the crowdsource plugin written in python. To run it:
+This subdirectory contains a simple server for the radarhub plugin written in python. To run it:
 
 ```
 virtualenv myenv

@@ -1,14 +1,14 @@
 site:
   title: KAHU Radar Hub
   url:  https://nowhere.net
-  start_page: crowdsource:ROOT:index.adoc
+  start_page: radarhub:ROOT:index.adoc
 
 content:
   sources:
     - url: ..
       start_path: manual
       branches: HEAD
-      edit_url: https://github.com/opencpn-manuals/crowdsource/edit/master/{path}
+      edit_url: https://github.com/opencpn-manuals/radarhub/edit/master/{path}
 
 ui:   
   bundle:

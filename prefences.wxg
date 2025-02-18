@@ -32,7 +32,7 @@
                         <border>0</border>
                         <object class="wxTextCtrl" name="server" base="EditTextCtrl">
                             <size>300, 32</size>
-                            <value>crowdsource.kahu.earth</value>
+                            <value>radarhub.kahu.earth</value>
                         </object>
                     </object>
                     <object class="sizeritem">
@@ -74,7 +74,7 @@
                                 <border>0</border>
                                 <object class="wxHyperlinkCtrl" name="hyperlink_1" base="EditHyperlinkCtrl">
                                     <label>Make account</label>
-                                    <url>https://crowdsource.kahu.earth</url>
+                                    <url>https://radarhub.kahu.earth</url>
                                     <attribute>1</attribute>
                                 </object>
                             </object>

@@ -16,3 +16,6 @@
 [submodule "libs/avro"]
 	path = libs/avro
 	url = https://github.com/KAHU-radar/avro.git
+[submodule "data/protocol"]
+	path = data/protocol
+	url = https://github.com/KAHU-radar/radarhub-protocol.git

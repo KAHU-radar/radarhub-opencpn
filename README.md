@@ -40,9 +40,9 @@ Plugin files for various OSes can be downloaded from [Cloudsmith](https://clouds
 * Install the `radar` plugin and configure your radar in it.
   - Make sure you can see the radar picture.
   - Turn on ARPA.
-* Make an account on http://radarhub.kahu.earth and make an API key there
+* Make an account on https://crowdsource.kahu.earth and make an API key there
 * Install the `radarhub` plugin
-  - In its preferences dialog, configure the server address `radarhub.kahu.earth` and the API key from the previous step
+  - In its preferences dialog, configure the server address `crowdsource.kahu.earth` and the API key from the previous step
   - Check that it reports that it managed to connect ("last connection" should say a few seconds ago)
 * Install the VDR plugin
 
@@ -56,7 +56,7 @@ but it also highlights some of the features and so might be interesting to other
 The following steps are to ensure the plugin is working as intended
 
 * Check that other vessels going in/out of the port are reported as ARPA targets (and a subset as AIS targets of course)
-* Check on  http://radarhub.kahu.earth that these vessels shows up as tracks you have contributed
+* Check on  https://crowdsource.kahu.earth that these vessels shows up as tracks you have contributed
 * Check that they are in the right place on the map
 * In the `radarhub` plugin preferences dialog, check that it reports that the last connection was very recently (seconds ago)
 * Turn off your internet connection / turn off the internet connection for the opencpn laptop, but not its connection to the radar and AIS/NMEA
@@ -64,7 +64,7 @@ The following steps are to ensure the plugin is working as intended
 * In the `radarhub` plugin preferences dialog, check that it reports that the last connection was roughly when you turned of the internet connection, and that the number of "queued tracks" is not 0 (should match numbers of targets you've seen).
 * Turn on the internet connection again
 *  In the `radarhub` plugin preferences dialog, check that it reports that the last connection recently (seconds ago), and that the number of "queued tracks" is now 0 again.
-* Check on http://radarhub.kahu.earth that these vessels seen while you where offline now shows up as tracks you have contributed
+* Check on https://crowdsource.kahu.earth that these vessels seen while you where offline now shows up as tracks you have contributed
 
 ### On voyages
 
@@ -75,7 +75,7 @@ These steps are to test the capabilities and accuracy of the plugin
 * When you get back to shore
   - send us the VDR recording (vdr.txt) to compare to data we received from the plugin
   - send us the date & time of the start and end of your voyage
-* When back at shore, check out http://radarhub.kahu.earth to see the tracks you collected
+* When back at shore, check out https://crowdsource.kahu.earth to see the tracks you collected
 
 ## Server
 

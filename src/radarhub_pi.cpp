@@ -208,6 +208,7 @@ int radarhub_pi::Init(void)
     std::string slash = wxString(wxFileName::GetPathSeparator()).ToStdString();
     std::string migrations = (GetPluginDataDir("radarhub_pi").ToStdString()
                               + slash + "data"
+                              + slash + "protocol"
                               + slash + "migrations");
 
     std::string db_name =(GetpPrivateApplicationDataLocation()->ToStdString()
@@ -349,7 +350,7 @@ void radarhub_pi::ShowPreferencesDialog(wxWindow *parent) {
         wxString api_key;
         float min_reconnect_time;
         float max_reconnect_time;
-        config->Read("/Server/server", &server, "radarhub.kahu.earth");
+        config->Read("/Server/server", &server, "crowdsource.kahu.earth");
         config->Read("/Server/port", &port, 9900);
         config->Read("/Server/api_key", &api_key, "");
         config->Read("/Connection/min_reconnect_time", &min_reconnect_time, 100.0);

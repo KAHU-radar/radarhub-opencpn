@@ -59,7 +59,7 @@ background, sending tracks.
 
 To use the plugin, you need an API key for an account on a server /
 crowdsourcing platform, as well as servername and port. Start by
-making an account with the http://radarhub.kahu.earth[`KAHU radar
+making an account with the https://crowdsource.kahu.earth[`KAHU radar
 hub`]. Once signed in, create an API key for your boat and fill it in
 in the plugin preferences. Hit `save`.
 

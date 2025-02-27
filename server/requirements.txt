@@ -1,3 +1,0 @@
-avro
-shapely
-geopandas

@@ -79,8 +79,12 @@ These steps are to test the capabilities and accuracy of the plugin
 
 ## Server
 
-An example server written in Python is provided in the [server subdirectory](server). This server implements the full protocol, but just dumps all received tracks to disk in geojson format.
-It can be used as a simple shore based VDR, but mostly serves as an example base for anyone wanting to build a more elaborate server side setup.
+An example server written in Python is provided
+[here](https://github.com/KAHU-radar/radarhub-server). This server
+implements the full protocol, but just dumps all received tracks to
+disk in geojson format. It can be used as a simple shore based VDR,
+but mostly serves as an example base for anyone wanting to build a
+more elaborate server side setup.
 
 
 ## Build instructions

@@ -1,0 +1,71 @@
+{"name": "kahu.Proto", "type": "record",
+ "fields": [
+   {"name": "Message", "type": [
+     {"name": "kahu.Call", "type": "record",
+      "fields": [
+        {"name": "Call", "type": {
+          "name": "kahu.CallMessage", "type": "record",
+          "fields": [
+            {"name": "id", "type": "int"},
+            {"name": "Call", "type": [
+              {"name": "kahu.LoginMessage", "type": "record",
+               "fields": [{"name": "Login", "type": {
+                 "name": "kahu.Login", "type": "record",
+                 "fields": [
+                   {"name": "apikey", "type": "string"}
+                 ]
+               }}]},
+              {"name": "kahu.SubmitMessage", "type": "record",
+               "fields": [{"name": "Submit", "type": {
+                 "name": "kahu.Submit", "type": "record",
+                 "fields": [
+                   {"name": "uuid", "type": ["null", "string"], "logicalType": "uuid"},
+                   {"name": "route", "type": {
+                     "type": "array", "items": {
+                       "name": "kahu.LineString",
+                       "type": "record",
+                       "fields": [
+                         {"name": "lat", "type": "float"},
+                         {"name": "lon", "type": "float"},
+                         {"name": "timestamp", "type": "float"}
+                       ]
+                     }}},
+                   {"name": "nmea", "type": ["null", "string"]},
+                   {"name": "start", "type": "long", "logicalType": "timestamp-millis"}
+                 ]
+               }}]}
+            ]}
+          ]}}
+      ]},
+     {"name": "kahu.Response", "type": "record",
+      "fields": [
+        {"name": "Response", "type": {
+          "name": "kahu.ResponseMessage", "type": "record",
+          "fields": [
+            {"name": "id", "type": "int"},
+            {"name": "Response", "type": [
+              {"name": "kahu.ErrorResponseMessage", "type": "record",
+               "fields": [{"name": "Error", "type": {
+                 "name": "kahu.ErrorResponse", "type": "record",
+                 "fields": [
+                   {"name": "exception", "type": "string"}
+                 ]
+               }}]},
+              {"name": "kahu.LoginResponseMessage", "type": "record",
+               "fields": [{"name": "Login", "type": {
+                 "name": "kahu.LoginResponse", "type": "record",
+                 "fields": []
+               }}]},
+              {"name": "kahu.SubmitResponseMessage", "type": "record",
+               "fields": [{"name": "Submit", "type": {
+                 "name": "kahu.SubmitResponse", "type": "record",
+                 "fields": [
+                   {"name": "uuid", "type": ["null", "string"], "logicalType": "uuid"}
+                 ]
+               }}]}
+            ]}
+          ]}}
+      ]}
+   ]}
+ ]
+}

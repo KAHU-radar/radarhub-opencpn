@@ -1,0 +1,98 @@
+= KAHU radar hub 0.1.182
+
+Developer: Egil Moeller
+
+== Links
+
+* Source: https://github.com/KAHU-radar/radarhub_pi
+* Releases: https://github.com/KAHU-radar/radarhub_pi/releases[Github Releases]
+* Download: https://opencpn.org/OpenCPN/plugins/radarhub.html[Website Download]
+
+== Summary
+
+image::screenshot.png[Screenshot of full UI]
+
+Contribute AIS and ARPA targets from your vessel to crowdsourcing for
+marine safety!
+
+This plugin lets you upload AIS and radar ARPA targets (or any NMEA) to
+an internet server. Upload can be continuous, over intermittent
+internet, or scheduled, and tracks can be downsampled to fit your
+bandwidth. The communication protocol is based on
+https://avro.apache.org/[Apache Avro] and batches track points so that
+the overhead for each point above timestamp and lat/lon is low, meaning
+it is designed to be as bandwidth conservative as possible.
+
+
+== Server
+
+An example server written in Python is provided in the
+https://github.com/KAHU-radar/radarhub_pi/tree/master/server[`the
+server subdirectory of the plugin sources`]. This server implements
+the full protocol, but just dumps all received tracks to disk in
+geojson format. It can be used as a simple shore based VDR, but mostly
+serves as an example base for anyone wanting to build a more elaborate
+server side setup.
+
+
+== Integration with other plugins
+
+This plugin is designed to be used in conjunction with the
+https://github.com/opencpn-radar-pi/radar_pi[radar_pi] radar plugin.
+Make sure to enable ARPA targets, as that is what this plugin uses.
+Alternatively, it can use
+https://gpsd.gitlab.io/gpsd/NMEA.html#_ttm_tracked_target_message[`$RATTM`]
+and
+https://gpsd.gitlab.io/gpsd/NMEA.html#_tll_target_latitude_and_longitude[`$RATTL`]
+NMEA messages originating from an external radar system.
+
+
+== Settings
+
+Options > Plugins > KAHU radar hub > Preferences
+
+The settings window is also the only user interface provided by the
+plugin. During normal operations, the plugin is only working in the
+background, sending tracks.
+
+=== Server account
+
+To use the plugin, you need an API key for an account on a server /
+crowdsourcing platform, as well as servername and port. Start by
+making an account with the http://radarhub.kahu.earth[`KAHU radar
+hub`]. Once signed in, create an API key for your boat and fill it in
+in the plugin preferences. Hit `save`.
+
+Once you open the plugin preferences again, the connection status
+(shown under the last connection time) should say "logged in".
+
+=== Internet connectivity
+
+The plugin will connect to the server over TCP, and will reconnect of
+the connection is terminated. It will use exponential back-off to not
+saturate a bad connection with reconnection attempts. The shortest and
+longest reconnection times for this back-off algorithm can be
+specified in the `Minimum reconnect delay` and `Maximum reconnect
+delay` fields respectively.
+
+=== Connection status
+
+The preferences dialog shows when the plugin managed to connect to the
+server last (time and date), and right under that, the connection
+status - connected, logged in, or an error.
+
+The dialog also shows how many received tracks (that is, individual
+ARPA targets from your radar) are waiting to be sent, as well as the
+total number of unsent trackpoints.
+
+== Track cache
+
+Tracks are stored in `~/.opencpn/routecache.sqlite3` (and the
+corresponding path on windows). If this file is deleted, all sent and
+unsent tracks are deleted. The file will be created as soon as the
+plugin runs.
+
+Note: The size of the data in this file is larger than what is
+transferred over the network - both due to metadata needed for
+bookkeeeping, due to downsampling of tracks, not sending all details
+of messages and due to a less compressed format.

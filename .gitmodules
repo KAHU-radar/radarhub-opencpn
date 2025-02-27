@@ -1,0 +1,18 @@
+[submodule "opencpn-libs"]
+	path = opencpn-libs
+	url = https://github.com/OpenCPN/opencpn-libs.git
+	branch = main
+[submodule "libs/zlib"]
+	path = libs/zlib
+	url = https://github.com/madler/zlib.git
+        branch = develop
+[submodule "libs/jansson"]
+	path = libs/jansson
+	url = https://github.com/akheron/jansson.git
+        branch = master
+[submodule "libs/liblzma"]
+	path = libs/liblzma
+	url = https://github.com/ImageMagick/lzma.git
+[submodule "libs/avro"]
+	path = libs/avro
+	url = https://github.com/KAHU-radar/avro.git

@@ -1,0 +1,4 @@
+name: radarhub_pi
+title: KAHU Radar Hub
+version: ~
+start_page: radarhub::index.adoc

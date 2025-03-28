@@ -182,7 +182,12 @@ void Routecache::Insert(
     std::lock_guard<std::mutex> guard(lock);
 
     wxDateTime now = wxDateTime::Now();
- 
+
+    if (target_status == "L") {
+      route_updates[target_id].Set(1, wxDateTime::Jan, 1970, 0, 0, 0, 0);
+      return;
+    }
+
     if (now
         .Subtract(
                   route_updates[target_id])

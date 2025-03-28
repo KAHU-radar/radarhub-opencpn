@@ -56,7 +56,7 @@
 
 #include "wx/jsonwriter.h"
 #include <wx/socket.h>
-
+#include <cmath>
 
 #ifndef DECL_EXP
 #ifdef __WXMSW__
@@ -393,12 +393,13 @@ void radarhub_pi::SetPositionFixEx(PlugIn_Position_Fix_Ex &pfix)
     cog = pfix.Cog; // Course over ground
 }
 
-static std::regex nmeaRattmRegex(R"(\$RATTM,(\d{2}),([\d\.\-]+),([\d\.\-]+),([^,]*),([\d\.\-]+),([\d\.\-]+),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),(..*)\*([A-Fa-f0-9]{2})\s*)");
+static std::regex nmeaRattmRegex(R"(\$RATTM,([\s\d]{2}),([\s\d\.\-]+),([\s\d\.\-]+),([^,]*),([\s\d\.\-]+),([\s\d\.\-]+),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),(..*)\*([\sA-Fa-f0-9]{2})\s*)");
 
 
 
 void radarhub_pi::Polar2Pos(double bearing, double distance, double& lat, double& lon) {
     // latitude & longitude are of own ship, all other variables pertain to a target
+    // distance is in meters
     lat = latitude + distance * cos(deg2rad(bearing)) / 60. / 1852.;
     lon = longitude + distance * sin(deg2rad(bearing)) / cos(deg2rad(latitude)) / 60. / 1852.;
 }
@@ -438,7 +439,21 @@ void radarhub_pi::SetNMEASentence(wxString &sentence)
 
         double target_latitude;
         double target_longitude;
-        Polar2Pos(target_bearing, target_distance, target_latitude, target_longitude);
+        double target_distance_meters = target_distance;
+        if (target_distance_unit == "K") {
+          target_distance_meters *= 1000.;
+        } else if (target_distance_unit == "S") {
+          target_distance_meters *= 1609.344;
+        } else /* if (target_distance_unit == "N") */ {
+          target_distance_meters *= 1852.;
+        }
+
+        double target_bearing_absolute = target_bearing;
+        if (target_bearing_unit == "R") {
+          target_bearing_absolute = fmod(target_bearing_absolute + cog, 360.);
+        }
+        
+        Polar2Pos(target_bearing_absolute, target_distance_meters, target_latitude, target_longitude);
 
         std::cout << "Target ID: " << target_id << std::endl;
         std::cout << "Target Distance: " << target_distance << std::endl;
@@ -452,7 +467,7 @@ void radarhub_pi::SetNMEASentence(wxString &sentence)
         std::cout << "Target Status: " << target_status << std::endl;
         std::cout << "Target latitude: " << target_latitude << std::endl;
         std::cout << "Target longitude: " << target_longitude << std::endl;
-
+        
         try {
             cache->Insert(
                 target_id,

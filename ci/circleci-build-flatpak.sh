@@ -66,7 +66,7 @@ if [ -n "$CI" ]; then
 
 
     # Install flatpak and flatpak-builder - obsoleted by flathub
-    sudo apt install flatpak flatpak-builder
+    sudo apt install -y flatpak flatpak-builder
 
 fi
 

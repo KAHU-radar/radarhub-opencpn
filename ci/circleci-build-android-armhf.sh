@@ -105,6 +105,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE=cmake/android-armhf-toolchain.cmake \
   -DQt_Build=build_arm32_19_O3/qtbase \
   -DOCPN_Android_Common=OCPNAndroidCommon-master \
   -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   ..
 
 make VERBOSE=1

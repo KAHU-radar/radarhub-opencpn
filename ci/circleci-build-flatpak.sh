@@ -22,11 +22,11 @@ if [ "${CIRCLECI_LOCAL,,}" = "true" ]; then
     fi
 fi
 
-sudo apt-get -q -y --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages update
+sudo DEBIAN_FRONTEND=noninteractive apt-get -q -y --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages update
 
 #PLUGIN=bsb4
 
-sudo apt --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install flatpak flatpak-builder
+sudo DEBIAN_FRONTEND=noninteractive apt --allow-unauthenticated --allow-downgrades --allow-remove-essential --allow-change-held-packages install flatpak flatpak-builder
 
 # Install extra build libs
 ME=$(echo ${0##*/} | sed 's/\.sh//g')
@@ -34,14 +34,14 @@ EXTRA_LIBS=./ci/extras/extra_libs.txt
 if test -f "$EXTRA_LIBS"; then
     sudo apt update
     while read line; do
-        sudo apt-get install $line
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install $line
     done < $EXTRA_LIBS
 fi
 EXTRA_LIBS=./ci/extras/${ME}_extra_libs.txt
 if test -f "$EXTRA_LIBS"; then
-    sudo apt update
+    sudo DEBIAN_FRONTEND=noninteractive apt update
     while read line; do
-        sudo apt-get install $line
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install $line
     done < $EXTRA_LIBS
 fi
 
@@ -49,10 +49,10 @@ git config --global protocol.file.allow always
 git submodule update --init
 
 if [ -n "$CI" ]; then
-    sudo apt update
+    sudo DEBIAN_FRONTEND=noninteractive apt update
 
     # Avoid using outdated TLS certificates, see #210.
-    sudo apt install --reinstall  ca-certificates
+    sudo DEBIAN_FRONTEND=noninteractive apt install --reinstall  ca-certificates
 
     # Use updated flatpak workaround
 #    sudo add-apt-repository -y ppa:alexlarsson/flatpak
@@ -66,7 +66,7 @@ if [ -n "$CI" ]; then
 
 
     # Install flatpak and flatpak-builder - obsoleted by flathub
-    sudo apt install -y flatpak flatpak-builder
+    sudo DEBIAN_FRONTEND=noninteractive apt install -y flatpak flatpak-builder
 
 fi
 

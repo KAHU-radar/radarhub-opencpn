@@ -393,7 +393,7 @@ void radarhub_pi::SetPositionFixEx(PlugIn_Position_Fix_Ex &pfix)
     cog = pfix.Cog; // Course over ground
 }
 
-static std::regex nmeaRattmRegex(R"(\$RATTM,([\s\d]{2}),([\s\d\.\-]+),([\s\d\.\-]+),([^,]*),([\s\d\.\-]+),([\s\d\.\-]+),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),(..*)\*([\sA-Fa-f0-9]{2})\s*)");
+static std::regex nmeaRattmRegex(R"(\$RATTM,([\s\d]{2}),([\s\d\.\-]+),([\s\d\.\-]+),([^,]*),([\s\d\.\-]*),([\s\d\.\-]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),(..*)\*([\sA-Fa-f0-9]{2})\s*)");
 
 
 
@@ -428,8 +428,8 @@ void radarhub_pi::SetNMEASentence(wxString &sentence)
         double target_distance = std::stod(match[2]);
         double target_bearing = std::stod(match[3]);
         std::string target_bearing_unit = match[4];
-        double target_speed = std::stod(match[5]);
-        double target_course = std::stod(match[6]);
+        double target_speed = match[5].str().empty() ? 0 : std::stod(match[5].str());
+        double target_course = match[6].str().empty() ? 0 : std::stod(match[6].str());
         std::string target_course_unit = match[7];
         // target_distance_closes_point_of_approac = std::stod(match[8]);
         // target_time_closes_point_of_approac = std::stod(match[9]);

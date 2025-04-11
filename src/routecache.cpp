@@ -183,7 +183,9 @@ void Routecache::Insert(
 
     wxDateTime now = wxDateTime::Now();
 
-    if (target_status == "L") {
+    // radar_pi ALSO sets status L when a target matches AIS, but in that case
+    // distance & bearing are real values, not 0
+    if ((target_status == "L") && (target_distance == 0.0) && (target_bearing == 0.0)) {
       route_updates[target_id].Set(1, wxDateTime::Jan, 1970, 0, 0, 0, 0);
       return;
     }

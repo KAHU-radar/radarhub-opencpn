@@ -226,6 +226,7 @@ public:
     int GetPlugInVersionPost(); // 117  
 
     void Polar2Pos(double, double, double&, double&);
+    double NMEADegMinToDecimal(const std::string& val, const std::string& dir);
 
     double latitude;
     double longitude;

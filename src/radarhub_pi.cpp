@@ -78,7 +78,6 @@ wxBitmap                *m_pdeficon;
 // Needed for ocpndc.cpp to compile. Normally would be in glChartCanvas.cpp
 float g_GLMinSymbolLineWidth;
 
-
 // the class factories, used to create and destroy instances of the PlugIn
 
 extern "C" DECL_EXP opencpn_plugin* create_pi(void *ppimgr)
@@ -387,15 +386,22 @@ void radarhub_pi::ShowPreferencesDialog(wxWindow *parent) {
 
 void radarhub_pi::SetPositionFixEx(PlugIn_Position_Fix_Ex &pfix)
 {
+ /*
     latitude = pfix.Lat;
     longitude = pfix.Lon;
     sog = pfix.Sog; // Speed over ground
     cog = pfix.Cog; // Course over ground
+ */
 }
 
 static std::regex nmeaRattmRegex(R"(\$RATTM,([\s\d]{2}),([\s\d\.\-]+),([\s\d\.\-]+),([^,]*),([\s\d\.\-]*),([\s\d\.\-]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),(..*)\*([\sA-Fa-f0-9]{2})\s*)");
 
-
+// GGA: $GPGGA,time,lat,N,lon,E,...
+std::regex nmeaGgaRegex(R"(^\$GP(GGA),[^,]*,([^,]*),([NS]),([^,]*),([EW]),.*\s*)");
+// GLL: $GPGLL,lat,N,lon,E,time,status,...
+std::regex nmeaGllRegex(R"(^\$GP(GLL),([^,]*),([NS]),([^,]*),([EW]),[^,]*,([AV])\s*)");
+// RMC: $GPRMC,time,status,lat,N,lon,E,sog,cog,...
+std::regex nmeaRmcRegex(R"(^\$GP(RMC),[^,]*,([AV]),([^,]*),([NS]),([^,]*),([EW]),[^,]*,([^,]*),.*\s*)");
 
 void radarhub_pi::Polar2Pos(double bearing, double distance, double& lat, double& lon) {
     // latitude & longitude are of own ship, all other variables pertain to a target
@@ -404,89 +410,122 @@ void radarhub_pi::Polar2Pos(double bearing, double distance, double& lat, double
     lon = longitude + distance * sin(deg2rad(bearing)) / cos(deg2rad(latitude)) / 60. / 1852.;
 }
 
+double radarhub_pi::NMEADegMinToDecimal(const std::string& val, const std::string& dir) {
+    if (val.empty()) return 0.0;
+
+    double raw = std::stod(val);
+    int deg = static_cast<int>(raw / 100);
+    double min = raw - (deg * 100);
+    double dec = deg + (min / 60.0);
+
+    if (dir == "S" || dir == "W")
+        dec = -dec;
+
+    return dec;
+}
 
 void radarhub_pi::SetNMEASentence(wxString &sentence)
 {
-    std::cout << "Crowdsource: Received NMEA" << sentence <<
+    std::cout << "Crowdsource: Received NMEA " << sentence <<
      " at lat=" << latitude << " lon=" << longitude <<
      " course=" << cog <<
      std::endl;
-    if (sentence.StartsWith("$RATTL")) {
-    } else if (sentence.StartsWith("$RATTM")) {
-        std::smatch match;
-        std::string sentence_str = sentence.ToStdString();
-        if (!std::regex_match(sentence_str, match, nmeaRattmRegex)) {
-          std::cerr << "Failed to parse RATTM NMEA sentence: [" << sentence << "]\n";
-          return;
-        }
-        if (match.size() != 15) {
-          std::cerr << "Only parsed " << (match.size() - 1) << " fields of RATTM NMEA sentence: [" << sentence << "]\n";
-          return;
-        }
 
-        int target_id = std::stoi(match[1]);
-        double target_distance = std::stod(match[2]);
-        double target_bearing = std::stod(match[3]);
-        std::string target_bearing_unit = match[4];
-        double target_speed = match[5].str().empty() ? 0 : std::stod(match[5].str());
-        double target_course = match[6].str().empty() ? 0 : std::stod(match[6].str());
-        std::string target_course_unit = match[7];
-        // target_distance_closes_point_of_approac = std::stod(match[8]);
-        // target_time_closes_point_of_approac = std::stod(match[9]);
-        std::string target_distance_unit = match[10];
-        std::string target_name = match[11];
-        std::string target_status = match[12];
+    std::smatch match;
+    std::string sentence_str = sentence.ToStdString();
 
-        double target_latitude;
-        double target_longitude;
-        double target_distance_meters = target_distance;
-        if (target_distance_unit == "K") {
-          target_distance_meters *= 1000.;
-        } else if (target_distance_unit == "S") {
-          target_distance_meters *= 1609.344;
-        } else /* if (target_distance_unit == "N") */ {
-          target_distance_meters *= 1852.;
-        }
+    try {
+        /* Parse these ourselves, as SetPositionFixEx updates too seldomly, leading to bad positioning of targets */
+        if (std::regex_match(sentence_str, match, nmeaGgaRegex)) {
+            latitude = NMEADegMinToDecimal(match[2].str(), match[3].str());
+            longitude = NMEADegMinToDecimal(match[4].str(), match[5].str());
+        } else if (std::regex_match(sentence_str, match, nmeaGllRegex)) {
+            if (match[6] == "A") {
+                latitude = NMEADegMinToDecimal(match[1].str(), match[2].str());
+                longitude = NMEADegMinToDecimal(match[3].str(), match[4].str());
+            }
+        } else if (std::regex_match(sentence_str, match, nmeaRmcRegex)) {
+            if (match[2] == "A") {
+                latitude = NMEADegMinToDecimal(match[3].str(), match[4].str());
+                longitude = NMEADegMinToDecimal(match[5].str(), match[6].str());
+                if (!match[7].str().empty()) {
+                    cog = std::stod(match[7].str());
+                }
+            }
+        /* } else if (!std::regex_match(sentence_str, match, nmeaRattlRegex)) { */
+        } else if (std::regex_match(sentence_str, match, nmeaRattmRegex)) {
+            if (match.size() != 15) {
+              std::cerr << "Only parsed " << (match.size() - 1) << " fields of RATTM NMEA sentence: [" << sentence << "]\n";
+              return;
+            }
 
-        double target_bearing_absolute = target_bearing;
-        if (target_bearing_unit == "R") {
-          target_bearing_absolute = fmod(target_bearing_absolute + cog, 360.);
-        }
-        
-        Polar2Pos(target_bearing_absolute, target_distance_meters, target_latitude, target_longitude);
+            int target_id = std::stoi(match[1]);
+            double target_distance = std::stod(match[2]);
+            double target_bearing = std::stod(match[3]);
+            std::string target_bearing_unit = match[4];
+            double target_speed = match[5].str().empty() ? 0 : std::stod(match[5].str());
+            double target_course = match[6].str().empty() ? 0 : std::stod(match[6].str());
+            std::string target_course_unit = match[7];
+            // target_distance_closes_point_of_approac = std::stod(match[8]);
+            // target_time_closes_point_of_approac = std::stod(match[9]);
+            std::string target_distance_unit = match[10];
+            std::string target_name = match[11];
+            std::string target_status = match[12];
 
-        std::cout << "Target ID: " << target_id << std::endl;
-        std::cout << "Target Distance: " << target_distance << std::endl;
-        std::cout << "Target Distance Unit: " << target_distance_unit << std::endl;
-        std::cout << "Bearing from Own Ship: " << target_bearing << std::endl;
-        std::cout << "Bearing Unit: " << target_bearing_unit << std::endl;
-        std::cout << "Target Speed: " << target_speed << std::endl;
-        std::cout << "Target Course: " << target_course << std::endl;
-        std::cout << "Course unit: " << target_course_unit << std::endl;
-        std::cout << "Target Name: " << target_name << std::endl;
-        std::cout << "Target Status: " << target_status << std::endl;
-        std::cout << "Target latitude: " << target_latitude << std::endl;
-        std::cout << "Target longitude: " << target_longitude << std::endl;
-        
-        try {
-            cache->Insert(
-                target_id,
-                target_distance,
-                target_bearing,
-                target_bearing_unit,
-                target_speed,
-                target_course,
-                target_course_unit,
-                target_distance_unit,
-                target_name,
-                target_status,
-                latitude,
-                longitude,
-                target_latitude,
-                target_longitude);
-        } catch (const std::exception& e) {
-            std::cerr << "Failed to insert target point in cache: " << e.what() << "\n";
-        }
+            double target_latitude;
+            double target_longitude;
+            double target_distance_meters = target_distance;
+            if (target_distance_unit == "K") {
+              target_distance_meters *= 1000.;
+            } else if (target_distance_unit == "S") {
+              target_distance_meters *= 1609.344;
+            } else /* if (target_distance_unit == "N") */ {
+              target_distance_meters *= 1852.;
+            }
+
+            double target_bearing_absolute = target_bearing;
+            if (target_bearing_unit == "R") {
+              target_bearing_absolute = fmod(target_bearing_absolute + cog, 360.);
+            }
+
+            Polar2Pos(target_bearing_absolute, target_distance_meters, target_latitude, target_longitude);
+
+            std::cout << "Target ID: " << target_id << std::endl;
+            std::cout << "Target Distance: " << target_distance << std::endl;
+            std::cout << "Target Distance Unit: " << target_distance_unit << std::endl;
+            std::cout << "Bearing from Own Ship: " << target_bearing << std::endl;
+            std::cout << "Bearing Unit: " << target_bearing_unit << std::endl;
+            std::cout << "Target Speed: " << target_speed << std::endl;
+            std::cout << "Target Course: " << target_course << std::endl;
+            std::cout << "Course unit: " << target_course_unit << std::endl;
+            std::cout << "Target Name: " << target_name << std::endl;
+            std::cout << "Target Status: " << target_status << std::endl;
+            std::cout << "Target latitude: " << target_latitude << std::endl;
+            std::cout << "Target longitude: " << target_longitude << std::endl;
+
+            try {
+                cache->Insert(
+                    target_id,
+                    target_distance,
+                    target_bearing,
+                    target_bearing_unit,
+                    target_speed,
+                    target_course,
+                    target_course_unit,
+                    target_distance_unit,
+                    target_name,
+                    target_status,
+                    latitude,
+                    longitude,
+                    target_latitude,
+                    target_longitude);
+            } catch (const std::exception& e) {
+                std::cerr << "Failed to insert target point in cache: " << e.what() << "\n";
+            }
+       }
+    } catch (const std::exception& e) {
+        std::cerr << "[NMEA Parser] Error parsing sentence: " << sentence_str << "\n"
+                  << "Exception: " << e.what() << std::endl;
     }
 }
 
